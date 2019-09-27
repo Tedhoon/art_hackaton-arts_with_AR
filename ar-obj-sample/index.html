@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Letsee WebAR Demo</title>
+	
+	<!-- Adding Letsee WebAR SDK -->
+	<script src="https://cdn.letsee.io/webar/letsee-0.9.18.min.js"></script>
+	
+	<!-- THREE.js must be supplied -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/105/three.min.js"></script>
+	
+	<!-- OBJLoader library for loading .obj file -->
+	<script src="js/loaders/OBJLoader.js"></script>
+	
+	<!-- Adding configuration .JSON file.
+		1. The .JSON file MUST BE in the same folder hierarchy
+		with your .html and planar image.
+		2. media="place" is required. -->
+	<style media="place" type="text/css">
+		#container {
+			-letsee-target: uri('letsee-marker.json');
+		}
+	</style>
+</head>
+<body>
+<script>
+	
+	// Loading the Letsee WebAR Engine
+	const config = {
+		"appKey": "YOUR_APP_KEY",   // Replace the app key here with your own app key
+		"trackerType": "IMAGE"      // For planar image tracking, trackerType should be IMAGE
+	};
+	const letsee = new Letsee(config);
+	
+	// Engine tracking event
+	letsee.onLoad(() => init());
+	
+	// Initialize 3D world
+	function init() {
+		let object;
+		
+		// Using renderer, camera and scene from Engine.
+		const renderer = letsee.threeRenderer;
+		const scene = renderer.scene;
+		const camera = renderer.camera;
+		
+		// Adding lights
+		const ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
+		scene.add( ambientLight );
+		const pointLight = new THREE.PointLight( 0xffffff, 0.8 );
+		camera.add( pointLight );
+		scene.add( camera );
+		
+		// Loading model
+		function loadModel() {
+			object.traverse( function ( child ) {
+				if ( child.isMesh ) child.material.map = texture;
+			} );
+			object.position.y = - 95;
+			renderer.addObjectToEntity('letsee-marker.json', object);
+		}
+		
+		const manager = new THREE.LoadingManager( loadModel );
+		manager.onProgress = function ( item, loaded, total ) {
+			console.log( item, loaded, total );
+		};
+		
+		// Loading texture for the model
+		const textureLoader = new THREE.TextureLoader(manager);
+		const texture = textureLoader.load( 'textures/UV_Grid_Sm.jpg' );
+		
+		function onProgress( xhr ) {
+			if ( xhr.lengthComputable ) {
+				const percentComplete = xhr.loaded / xhr.total * 100;
+				console.log( 'model ' + Math.round( percentComplete, 2 ) + '% downloaded' );
+			}
+		}
+		
+		function onError() {}
+		
+		// Using OBJLoader from THREE.js to load the OBJ model from .obj file
+		const loader = new THREE.OBJLoader( manager );
+		
+		loader.load( 'models/obj/male02/male02.obj', function ( obj ) {
+			object = obj;
+		}, onProgress, onError );
+	}
+</script>
+</body>
+</html>

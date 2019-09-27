@@ -1,0 +1,10 @@
+{
+	"uri":"letsee-marker.json",
+	"name":"Letsee Web AR SDK",
+	"size":{
+		"width": 800,
+		"height": 566
+	},
+	"scale": 1,
+	"image":"letsee-marker.jpg"
+}

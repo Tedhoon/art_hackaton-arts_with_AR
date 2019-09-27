@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Letsee WebAR Demo</title>
+    
+    <!-- Adding Letsee WebAR SDK -->
+    <script src="https://cdn.letsee.io/webar/letsee-0.9.18.min.js"></script>
+    
+    <!-- Adding configuration .JSON file.
+	   1. The .JSON file MUST BE in the same folder hierarchy
+	   with your .html and planar image target.
+	   2. media="place" is required. -->
+    <style media="place">
+        #helloworld {
+            -letsee-target: uri('letsee-marker.json');
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading the Letsee WebAR Engine -->
+    <script>
+        const config = {
+            "appKey": "YOUR_APP_KEY",   // Replace the app key here with your own app key
+            "trackerType": "IMAGE",     // For planar image tracking, trackerType should be IMAGE
+        };
+        const letsee = new Letsee(config);
+        
+        // Engine tracking event
+        letsee.onLoad(function() {
+            const helloworld = document.createElement('h1');
+            helloworld.appendChild(document.createTextNode('Hello World!'));
+            
+            const renderable = new DOMRenderable(helloworld);
+            const entity = letsee.getEntity('letsee-marker.json');
+            
+            entity.addRenderable(renderable);
+        });
+    </script>
+</body>
+</html>

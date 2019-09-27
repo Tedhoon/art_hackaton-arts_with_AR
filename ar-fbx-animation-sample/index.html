@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Letsee WebAR Demo</title>
+	
+	<!-- Adding Letsee WebAR SDK -->
+	<script src="https://cdn.letsee.io/webar/letsee-0.9.18.min.js"></script>
+	
+	<!-- THREE.js must be supplied -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/105/three.min.js"></script>
+	
+	<!-- FBXLoader library and  external library Inflate.min.js required for FBXLoader -->
+	<script src="js/loaders/FBXLoader.js"></script>
+	<script src="js/libs/inflate.min.js"></script>
+	
+	<!-- Adding configuration .JSON file.
+		1. The .JSON file MUST BE in the same folder hierarchy
+		with your .html and planar image.
+		2. media="place" is required. -->
+	<style  media="place" type="text/css">
+		#container {
+			-letsee-target: uri('letsee-marker.json');
+		}
+	</style>
+</head>
+<body>
+	<script>
+		
+		// Loading the Letsee WebAR Engine
+		const config = {
+			"appKey": "YOUR_APP_KEY",   // Replace the app key here with your own app key
+			"trackerType": "IMAGE"      // For planar image tracking, trackerType should be IMAGE
+		};
+		const letsee = new Letsee(config);
+		
+		// Engine tracking event
+		letsee.onLoad(() => init());
+		
+		// Initialize 3D world
+		let mixer;
+		function init() {
+			
+			// Using renderer, camera and scene from Engine.
+			const renderer = letsee.threeRenderer;
+			const camera = renderer.camera;
+			const scene = renderer.scene;
+			let light;
+			
+			// Adding lights
+			light = new THREE.DirectionalLight(0xffffff);
+			light.position.set(0, -95, 120);
+			scene.add(light);
+			
+			// Loading model
+			const loader = new THREE.FBXLoader();
+			loader.load('models/fbx/Samba Dancing.fbx', function (object) {
+				
+				// Play animation if needed
+				mixer = new THREE.AnimationMixer(object);
+				const action = mixer.clipAction(object.animations[0]);
+				action.play();
+				object.position.y = - 95;
+				
+				// After loading model, add it into the planar image target
+				renderer.addObjectToEntity('letsee-marker.json', object)
+			});
+			letsee.addRenderModule({
+				name: 'fbxAnimation',
+				onRender: animate
+			});
+		};
+		let oldTime = null;
+		const animate = (tick) => {
+			if (oldTime ) {
+				const delta = tick - oldTime;
+				if (mixer) mixer.update(delta/1000);
+			}
+			oldTime = tick;
+		}
+	</script>
+</body>
+</html>
