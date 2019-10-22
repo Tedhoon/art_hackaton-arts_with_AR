@@ -28,8 +28,9 @@
         
         // Engine tracking event
         letsee.onLoad(function() {
-            const helloworld = document.createElement('h1');
+            const helloworld = document.createElement('h2');
             helloworld.appendChild(document.createTextNode('Hello World!'));
+            helloworld.style.color = 'white';
             
             const renderable = new DOMRenderable(helloworld);
             const entity = letsee.getEntity('letsee-marker.json');
