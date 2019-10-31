@@ -1,6 +1,6 @@
-# Letsee WebAR Tutorials
+# 아트해커톤 
 
-### Getting Started with Letsee WebAR SDK
+### 예술문화에 증강현실을 접목
 
 To get started with Letsee WebAR SDK, you will need to:
 
