@@ -13,25 +13,171 @@
 		2. media="place" is required. -->
     <style media="place" type="text/css">
         #container {
+            text-align: center;
             -letsee-target: uri('letsee-marker.json');
+            position:relative;
+            padding-top:60px;
+        }
+      
+    </style>
+    <style>
+        body{
+            text-align: center;
+
+        }
+        img{
+            width:200px;
+            height:140px;
+        }
+        #info_btn{
+           
+            color: #fff !important;
+            text-transform: uppercase;
+            text-decoration: none;
+            background: #60a3bc;
+            padding: 15px;
+            border-radius: 50px;
+            display: inline-block;
+            border: none;
+            transition: all 0.4s ease 0s;
+
+        }
+        #info_btn:hover{
+            text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
+            -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+            -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+            transition: all 0.4s ease 0s;
+
+        }
+        #info_area{
+            display: inline-block;
+            position:absolute;
+        }
+        .table{
+            /*border:1px solid black;*/
+            display: inline-block;
+                        color:white;
+
+        }
+        .table_header{
+
+            display: inline-block;
+            text-align: center;
+            width:40px;
+            float: left;
+            margin-right:2.5px;
+            font-size: 0.95rem;
+                        color:white;
+
+
+        }
+        
+        .table_data{
+
+            display: inline-block;
+            text-align: center;
+            width:160px;
+            float: left;
+            margin-left: 2.5px;
+            font-size: 0.95rem;
+                        color:white;
+
+        }
+        .table_row{
+
+            display: inline-block;
+            border-bottom: 1px white solid;
+            color:white;
         }
     </style>
+  
+
 </head>
 <body>
-
+      
     <!-- The id of this div tag MUST be the same with id defined in media="place" style. -->
-    <div id="container">
-        <h2 style="color: white">안녕하세요!</h2>
-        <img src="./custom_marker.jpg" width="50">
+    <div id="container" >
+    <!-- <iframe width="200" height="140" src="https://www.youtube.com/embed/SVyza9jzw18" frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+   
+      
     </div>
-
+    <div id='info_area'>
+        
+    </div>
+    <!-- <div id="info_area">
+    
+    </div> -->
     <!-- Loading the Letsee WebAR Engine -->
+
+
     <script>
-        const config = {
-            "appKey": "f74997f672f2e251be84a05d96cb45a83ce6c3551b7e0c64b207b63a87c4a306",   // Replace the app key here with your own app key
-            "trackerType": "IMAGE",     // For planar image tracking, trackerType should be IMAGE
-        };
-        const letsee = new Letsee(config);
+                const info_list = {
+                    '1' : '<div class ="table_row"><div class="table table_header"> 작품</div><div class="table table_data"> <키스> </div></div><br>'
+                    + '<div class ="table_row"><div class="table table_header"> 화가 </div><div class="table table_data"> 구스타프 클림트</div></div><br>'
+                    +'<div class ="table_row"><div class="table table_header">특징 </div><div class="table table_data"> 상징주의, 아르누보(새로운 미술),화려함</div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">그 외 작품 </div><div class="table table_data"> <아델리 블로흐 바우어 부인>, <유디트></div></div><br>'
+                    ,
+                    '2' : '<div class ="table_row"><div class="table table_header">작품</div><div class="table table_data"> <황소></div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">화가 </div><div class="table table_data"> 이중섭</div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">특징 </div><div class="table table_data"> 소를 많이 그림,은박지에 그림을 그린 일화, 위작이 많은 화가 </div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">그 외 작품 </div><div class="table table_data"> <흰소>, <부부></div></div><br>'
+                    ,
+                    '3' : '<div class ="table_row"><div class="table table_header">작품</div><div class="table table_data"> <여름></div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">화가 </div><div class="table table_data"> 르네 마그리트</div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">특징 </div><div class="table table_data"> 초현실주의, 자연을 소재로 많이 그림, </div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">그 외 작품 </div><div class="table table_data"> <구름>,<인간의 조건></div></div><br>'
+                        ,
+                    '4' : '<div class ="table_row"><div class="table table_header">작품</div><div class="table table_data"> <푸르빌의 절벽에서></div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">화가 </div><div class="table table_data"> 클로드 모네</div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">특징 </div><div class="table table_data"> 인상주의, 인상파의 개척자 </div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">그 외 작품 </div><div class="table table_data">〈인상, 해돋이〉,<루앙 대성당></div></div><br>'
+                    ,
+                    '5' : '<div class ="table_row"><div class="table table_header">작품</div><div class="table table_data"> <콜로세움></div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">화가 </div><div class="table table_data"> 강진경</div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">특징 </div><div class="table table_data"> 사실주의, 뚜렷한 화풍을 가지고 있지 않음 </div></div><br>'
+                     + '<div class ="table_row"><div class="table table_header">그 외 작품 </div><div class="table table_data"> <고양이>, <나의 친구></div></div><br>'
+                    ,
+                }
+            const config =  {
+                    "appKey": "f74997f672f2e251be84a05d96cb45a83ce6c3551b7e0c64b207b63a87c4a306",   // Replace the app key here with your own app key
+                    "trackerType": "IMAGE",     // For planar image tracking, trackerType should be IMAGE
+                };
+                const letsee = new Letsee(config);
+
+           
+            
+                const open_info = (ran_num) =>{
+                    let my_tag2 = document.getElementById("container")
+                    let info_tag2 = document.getElementById('container')
+                    my_tag2.innerHTML = "<img src ='유부초밥/" + ran_num.toString() + ".jpg' alt='그림을 찾을 수 없습니다'><br><br>" 
+                    +"<button id='info_btn' onClick='close_info(" + ran_num + ")'>설명 닫기</button><br><p style='color:black;'>"+info_list[ran_num]+"</p>"
+                }
+                const close_info = (ran_num)=>{
+                    let my_tag3 = document.getElementById("container")
+                    let info_tag3 = document.getElementById('container')
+
+                    my_tag3.innerHTML = "<img src ='유부초밥/" + ran_num.toString() + ".jpg' alt='그림을 찾을 수 없습니다'><br><br>" 
+                    +"<button id='info_btn' onClick='open_info(" + ran_num + ")'>설명 열기</button><br>"
+                }
+                
+                const random_fun = () => {
+                    let ran_num =  Math.floor(Math.random() * 5) + 1;
+                    console.log(ran_num)
+                    let my_tag =  document.getElementById("container")
+                    let info_tag = document.getElementById('container')
+                    my_tag.innerHTML = "<img src ='유부초밥/" + ran_num.toString() + ".jpg' alt='그림을 찾을 수 없습니다'><br><br>"
+                                        +"<button id='info_btn' onClick='open_info("+ ran_num + ")'>설명 보기</button>";
+                }
+                /*setInterval(random_fun,20000)*/
+               
+
+                random_fun()
+
+                
+            
+
     </script>
+
 </body>
 </html>
